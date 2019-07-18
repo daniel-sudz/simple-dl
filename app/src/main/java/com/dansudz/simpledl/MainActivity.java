@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
                 String path = FileUtil.getFullPathFromTreeUri(uri,this);
 
                 System.out.println(path);
-                System.out.println("test");
+                DOWNLOAD_LOCATION = path;
             }
         }
     }
@@ -291,7 +291,7 @@ public class MainActivity extends AppCompatActivity {
             wakeLock.acquire();
 
             IS_DOWNLOADER_RUNNING = 1; // downloader about to start, push download status
-            download_prog.callAttr("download_youtube", user_input); //call youtube-dl python module
+            download_prog.callAttr("download_youtube", user_input, DOWNLOAD_LOCATION); //call youtube-dl python module
 
             wakeLock.release();
             //realease wakelock after download has completed or has thrown an error

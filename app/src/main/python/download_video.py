@@ -3,14 +3,16 @@ from __future__ import unicode_literals
 import os
 import youtubedl as youtube_dl
 
-def download_youtube (url):
+def download_youtube (url, path):
 	#print(os.environ["HOME"])
 	os.chdir(os.environ["HOME"])
-	os.chdir('/sdcard/Download')
+	os.chdir('/storage/emulated/0/Download')
 
 	import sys
 	sys.stdout = open('logger.txt', 'w')
 	sys.stderr = open('logger.txt', 'w')
+
+	os.chdir(path)
 
 	ydl_opts = {
 		#'listformats':True
