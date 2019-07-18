@@ -1,6 +1,9 @@
 # Simple-dl
 Mobile app development (android) for a simple user interface to use the popular youtube-dl tool for downloading videos on the go. Made using android studio with Chaquopy 6.2 (python support). 
 
+## Try it out 
+Download the current compiled apk from the releases tab. Open an issue if something dosn't work. 
+
 ## Built using chaquopy
 Chaquopy is a plugin for android studio that allows you to implement python code into your project without changing anything. 
 
