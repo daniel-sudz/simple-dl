@@ -1,0 +1,11 @@
+//old asynctask
+
+AsyncTask.execute(new Runnable() {
+@Override
+public void run() {
+String user_input = ((EditText)findViewById(R.id.user_url_input)).getText().toString();
+py = Python.getInstance();
+PyObject download_prog = py.getModule("download_video");
+ download_prog.callAttr("download_youtube", user_input);
+ }
+});

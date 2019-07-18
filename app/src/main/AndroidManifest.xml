@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.youtube_dlunnoficialmobile">
+    package="com.dansudz.simpledl">
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
     <application
         android:name="com.chaquo.python.android.PyApplication"
+        android:versionCode="2"
+        android:versionName="1.00"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="Simple-dl mobile"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity android:name=".MainActivity"
             android:configChanges = "orientation"
             android:screenOrientation = "portrait"
@@ -22,6 +26,8 @@
 
 
                 <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="package.OtherActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
     </application>

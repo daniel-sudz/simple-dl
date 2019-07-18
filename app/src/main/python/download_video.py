@@ -10,6 +10,7 @@ def download_youtube (url):
 
 	import sys
 	sys.stdout = open('logger.txt', 'w')
+	sys.stderr = open('logger.txt', 'w')
 
 	ydl_opts = {
 		#'listformats':True

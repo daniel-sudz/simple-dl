@@ -6,6 +6,9 @@ android {
     buildToolsVersion "29.0.1"
     defaultConfig {
         python {
+            pip {
+                install "psutil"
+            }
             pyc {
                 stdlib true
             }
@@ -13,13 +16,13 @@ android {
 
         }
         ndk {
-            abiFilters "armeabi-v7a", "x86" , "x86_64"
+            abiFilters "armeabi-v7a", "x86" , "x86_64" , "arm64-v8a"
         }
-        applicationId "com.dansudz.youtube_dlunnoficialmobile"
+        applicationId "com.dansudz.simpledl"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "1.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -32,6 +35,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.jakewharton:process-phoenix:2.0.0'
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     testImplementation 'junit:junit:4.12'
