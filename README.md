@@ -12,3 +12,13 @@ Clone the repository and create a local.properties file with the location of you
 
 ## Beta build
 The app may behave in unintented ways as it is in beta and currently is very barebones. Expect more features and stability updates in the future.
+
+## Screenshots
+<p float="left">
+  <img src="https://user-images.githubusercontent.com/52898838/61487117-ed4de780-a959-11e9-9c81-48a1d0a3e1df.jpg" width="288" />
+  <img src="https://user-images.githubusercontent.com/52898838/61483577-f2a73400-a951-11e9-9d74-9d0d9464bc3d.jpg" width="288" /> 
+  <img src="https://user-images.githubusercontent.com/52898838/61483597-018de680-a952-11e9-8dc4-5a1981196ece.jpg" width="288">
+</p>
+
+
+
