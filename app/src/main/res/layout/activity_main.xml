@@ -94,13 +94,16 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.672" />
+        app:layout_constraintVertical_bias="0.611" />
 
     <TextView
         android:id="@+id/actualllog"
-        android:layout_width="391dp"
-        android:layout_height="126dp"
+        android:textStyle="bold"
+        android:layout_width="393dp"
+        android:layout_height="198dp"
         android:layout_marginEnd="8dp"
+        android:gravity="bottom"
+        android:scrollbars="vertical"
         android:text=""
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -108,7 +111,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.838" />
+        app:layout_constraintVertical_bias="0.969" />
 
     <Button
         android:id="@+id/set_directory"
