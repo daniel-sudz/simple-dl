@@ -41,7 +41,7 @@
         android:id="@+id/permission_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="248dp"
+        android:layout_marginEnd="252dp"
         android:importantForAutofill="no"
         android:text="Get Permissions"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -71,7 +71,7 @@
         android:id="@+id/cancel_video_download"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="60dp"
+        android:layout_marginEnd="44dp"
         android:importantForAutofill="no"
         android:text="Cancel Download"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -102,7 +102,6 @@
         android:layout_width="393dp"
         android:layout_height="198dp"
         android:layout_marginEnd="8dp"
-        android:gravity="bottom"
         android:scrollbars="vertical"
         android:text=""
         app:layout_constraintBottom_toBottomOf="parent"
@@ -117,7 +116,7 @@
         android:id="@+id/set_directory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="220dp"
+        android:layout_marginEnd="224dp"
         android:importantForAutofill="no"
         android:text="Download Location"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -126,6 +125,36 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.464" />
+        app:layout_constraintVertical_bias="0.437" />
+
+    <Button
+        android:id="@+id/cli_arguments"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:importantForAutofill="no"
+        android:text="Download Arguments"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.136"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.437" />
+
+    <Button
+        android:id="@+id/update_app"
+        android:layout_width="170dp"
+        android:layout_height="59dp"
+        android:layout_marginEnd="228dp"
+        android:importantForAutofill="no"
+        android:text="Update App W/ latest changes"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.136"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.534" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
