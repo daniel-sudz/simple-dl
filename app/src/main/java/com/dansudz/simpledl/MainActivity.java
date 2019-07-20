@@ -64,13 +64,13 @@ public class MainActivity extends AppCompatActivity {
     public boolean IS_APK_DOWNLOADING = false;
     public double APK_SIZE = 0.0;
     public String LATEST_APK_NAME = " ";
-    public String LAST_LINE_2 = "0qhFrQ1Yvuv9nl20YNYw3KjBm358vml5kb48aQ0c";
+    public String LAST_LINE_2 = "dskaldklkty4wjk234210-";
     public String DOWNLOAD_LOCATION = "/sdcard/Download";
-    public String LAST_LINE = "rqhFrQ9Yvuv9nlU0YNYwDKjBmV58vmltkb48aQ0c";
+    public String LAST_LINE = "2;31l;ldsa--5k32k;ldsa";
     public int DOWNLOAD_LOCATION_REQUEST_CODE = 20;
     public int IS_DOWNLOADER_RUNNING = 0;
     public String user_input;
-    public String user_input_for_customexecution;
+    public String user_input_for_customexecution = " ";
     public static final String CHANNEL_1_ID = "channel1";
     private int STORAGE_PERMISSION_CODE = 1;
     protected Python py;
@@ -171,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
                 console_text_window.setMovementMethod(new ScrollingMovementMethod());
                 File log_file = new File("/storage/emulated/0/Download/logger.txt");
                 if (IS_DOWNLOADER_RUNNING == 1) {
-                    if (tail2(log_file, 1) != null ) {
+                    if (tail2(log_file, 1) != null && tail2(log_file,1) != " " && tail2(log_file,1) != "") {
                         LAST_LINE_2 = tail2(log_file, 1);
                     }
 
@@ -183,21 +183,25 @@ public class MainActivity extends AppCompatActivity {
                         if ( LAST_LINE_2.contains(LAST_LINE) || LAST_LINE.contains(LAST_LINE_2)) {
                         }
                         else {
-                            console_text_window.append(LAST_LINE_2);
-                            sendonChannel(LAST_LINE_2);
+                            if (LAST_LINE_2 != "dskaldklkty4wjk234210-" && LAST_LINE != "2;31l;ldsa--5k32k;ldsa") {
+
+                                console_text_window.append(LAST_LINE_2);
+                                sendonChannel(LAST_LINE_2);
 
 
-                            if (LAST_LINE_2.contains("\n")) {} else {
-                                console_text_window.append("\n");
+                                if (LAST_LINE_2.contains("\n")) {
+                                } else {
+                                    console_text_window.append("\n");
+                                }
+                                System.out.println(LAST_LINE_2);
                             }
-                            System.out.println(LAST_LINE_2);
                         }
                     }
-                    if (tail2(log_file, 1) != null) {
+                    if (tail2(log_file, 1) != null && tail2(log_file, 1) != "" && tail2(log_file,1) != " ") {
                         LAST_LINE = tail2(log_file, 1);
                     }
                 }
-                handler.postDelayed(this, 200); // set time here to refresh textView)
+                handler.postDelayed(this, 50); // set time here to refresh textView)
             }
         });
 
@@ -248,7 +252,7 @@ public class MainActivity extends AppCompatActivity {
                                 //System.out.println(user_input_for_customexecution);
 
                                     //.task = new Custom_Python_downloader().execute();
-                                task = new Python_Downloader().execute();
+                                task = new Custom_Python_downloader().execute();
                             }
                         })
                         .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -287,8 +291,10 @@ public class MainActivity extends AppCompatActivity {
 
                 if (ContextCompat.checkSelfPermission(MainActivity.this,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                    System.out.println("test");
+
+
                     task = new Python_Downloader().execute();
+
                 } else {
                     Toast storage_toast = Toast.makeText(getApplicationContext(),
                             "You need write permission for this action", Toast.LENGTH_LONG);
