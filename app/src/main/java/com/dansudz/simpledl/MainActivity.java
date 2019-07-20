@@ -1,7 +1,4 @@
 package com.dansudz.simpledl;
-import java.net.MalformedURLException;
-import java.net.URL;
-import org.apache.commons.io.IOUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -38,6 +35,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,6 +46,7 @@ import com.jakewharton.processphoenix.ProcessPhoenix;
 
 import java.io.Console;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Array;
@@ -61,8 +60,13 @@ import static java.security.AccessController.getContext;
 
 
 public class MainActivity extends AppCompatActivity {
+    public int apk_download_progress = 0;
+    public boolean IS_APK_DOWNLOADING = false;
+    public double APK_SIZE = 0.0;
+    public String LATEST_APK_NAME = " ";
+    public String LAST_LINE_2 = "0qhFrQ1Yvuv9nl20YNYw3KjBm358vml5kb48aQ0c";
     public String DOWNLOAD_LOCATION = "/sdcard/Download";
-    public String LAST_LINE;
+    public String LAST_LINE = "rqhFrQ9Yvuv9nlU0YNYwDKjBmV58vmltkb48aQ0c";
     public int DOWNLOAD_LOCATION_REQUEST_CODE = 20;
     public int IS_DOWNLOADER_RUNNING = 0;
     public String user_input;
@@ -90,28 +94,92 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+
+
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN); //makes keyboard not mess up UI
 
         createNotificationChannels(); //Sets notification channel for pushing download progress
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        final ProgressBar apkdownload_bar = (ProgressBar) findViewById(R.id.apk_download);
 
 
         final TextView textViewToChange = (TextView) findViewById(R.id.logtobedisplayed);
         textViewToChange.setText(
                 "Full error log can be viewed in the downloads folder");
 
+        final Handler download_latest_release = new Handler(); //updates the console window
+        download_latest_release.post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if (IS_APK_DOWNLOADING) {
+
+                        apkdownload_bar.setVisibility(View.VISIBLE);
+                        apkdownload_bar.setMax(100);
+
+                        if (APK_SIZE == 0.0) {
+                            py = Python.getInstance();
+                            PyObject apk_latest_size = py.getModule("download_latest_apk");
+                            APK_SIZE = (double) (apk_latest_size.callAttr("return_latest_apk_size").toJava(float.class)) / (1024 * 1024); //call python module to get apk size
+                        }
+
+                        File latest_apk_file = new File("/storage/emulated/0/Download/" + LATEST_APK_NAME);
+                        double CURR_APK_SIZE = (double) latest_apk_file.length() / (1024 * 1024);
+
+                        //System.out.println(CURR_APK_SIZE);
+                        //System.out.println(APK_SIZE);
+
+                        if (APK_SIZE == 0.0) {
+                            apkdownload_bar.setProgress(0);
+                        } else {
+                            apk_download_progress = (int) (Math.ceil((CURR_APK_SIZE / APK_SIZE) * 100));
+                            apkdownload_bar.setProgress(apk_download_progress);
+                        }
+                        if (apk_download_progress == 100 || apk_download_progress == 99 && !IS_APK_DOWNLOADING) {
+                            Toast fail_download_apk = Toast.makeText(getApplicationContext(),
+                                    "Latest APK downloaded, head over to your downloads folder to install it", Toast.LENGTH_LONG);
+                            fail_download_apk.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 0);
+                            fail_download_apk.show();
+                        }
+                    } else {
+                        apkdownload_bar.setVisibility(View.INVISIBLE);
+
+                    }
+                    download_latest_release.postDelayed(this, 5); // set time here to refresh textView)
+                }
+                catch (Exception e) {
+                    IS_APK_DOWNLOADING = false;
+
+                }
+            }
+
+        });
+
+
+
         final Handler handler = new Handler(); //updates the console window
         handler.post(new Runnable() {
             @Override
             public void run() {
+               // System.out.println(LAST_LINE_2);
+               // System.out.println(LAST_LINE);
+
                 final TextView console_text_window = (TextView) findViewById(R.id.actualllog);
                 console_text_window.setMovementMethod(new ScrollingMovementMethod());
                 File log_file = new File("/storage/emulated/0/Download/logger.txt");
                 if (IS_DOWNLOADER_RUNNING == 1) {
-                    String LAST_LINE_2 = tail2(log_file, 1);
-                    if (LAST_LINE != LAST_LINE_2 && LAST_LINE_2 != "" && LAST_LINE_2 != "\n") {
+                    if (tail2(log_file, 1) != null ) {
+                        LAST_LINE_2 = tail2(log_file, 1);
+                    }
+
+                    System.out.println("last_line_2");
+                    System.out.println(LAST_LINE_2);
+                    System.out.println("Last_line");
+                    System.out.println(LAST_LINE);
+                    if (LAST_LINE!= null && LAST_LINE_2 != null && LAST_LINE != LAST_LINE_2 && LAST_LINE_2 != "" && LAST_LINE_2 != "\n") {
                         if ( LAST_LINE_2.contains(LAST_LINE) || LAST_LINE.contains(LAST_LINE_2)) {
                         }
                         else {
@@ -125,7 +193,9 @@ public class MainActivity extends AppCompatActivity {
                             System.out.println(LAST_LINE_2);
                         }
                     }
-                    LAST_LINE = tail2(log_file, 1);
+                    if (tail2(log_file, 1) != null) {
+                        LAST_LINE = tail2(log_file, 1);
+                    }
                 }
                 handler.postDelayed(this, 200); // set time here to refresh textView)
             }
@@ -135,8 +205,30 @@ public class MainActivity extends AppCompatActivity {
         update_app.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                try {
+                    Toast start_apk_dowload = Toast.makeText(getApplicationContext(),
+                            "Downloading latest APK from Github to your downloads folder, progress bar is at the top", Toast.LENGTH_LONG);
+                    start_apk_dowload.setGravity(Gravity.CENTER | Gravity.CENTER_HORIZONTAL, 0, 0);
+                    start_apk_dowload.show();
 
 
+                    IS_APK_DOWNLOADING = true;
+
+                    py = Python.getInstance();
+                    PyObject return_latest_apk_name = py.getModule("download_latest_apk");
+                    LATEST_APK_NAME = return_latest_apk_name.callAttr("return_name_latest_apk").toJava(String.class); //call python module to get apk
+                    System.out.println(LATEST_APK_NAME);
+
+
+                    task = new download_latest_apk().execute();
+                }
+                catch (Exception e) {
+                    Toast fail_download_apk = Toast.makeText(getApplicationContext(),
+                            "Error fetching apk \n You can: \n 1)Grant write access \n 2)Check internet connection \n 3)Check Github for notices", Toast.LENGTH_LONG);
+                    fail_download_apk.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 0);
+                    fail_download_apk.show();
+                    IS_APK_DOWNLOADING = false;
+                }
             }
         });
 
@@ -156,7 +248,7 @@ public class MainActivity extends AppCompatActivity {
                                 //System.out.println(user_input_for_customexecution);
 
                                     //.task = new Custom_Python_downloader().execute();
-                                //task1 = new Python_Downloader().execute();
+                                task = new Python_Downloader().execute();
                             }
                         })
                         .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -394,6 +486,33 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public class download_latest_apk extends AsyncTask<Void, Void, Bitmap> {
+
+        @Override
+        protected void onPreExecute() {
+
+        }
+
+        protected Bitmap doInBackground(Void... params) {
+
+            py = Python.getInstance();
+            PyObject download_latest_apk = py.getModule("download_latest_apk");
+
+
+            //acquire wakelock for download
+            PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+            PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+                    "MyApp::MyWakelockTag");
+            wakeLock.acquire();
+
+            download_latest_apk.callAttr("download_latest_apk"); //call python module to get apk
+
+            wakeLock.release();
+            //realease wakelock after download has completed or has thrown an error
+            IS_APK_DOWNLOADING = false;
+            return null;
+        }
+    }
 
 }
 
