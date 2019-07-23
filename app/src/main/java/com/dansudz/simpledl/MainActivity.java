@@ -164,21 +164,23 @@ public class MainActivity extends AppCompatActivity {
         handler.post(new Runnable() {
             @Override
             public void run() {
-               // System.out.println(LAST_LINE_2);
-               // System.out.println(LAST_LINE);
 
                 final TextView console_text_window = (TextView) findViewById(R.id.actualllog);
                 console_text_window.setMovementMethod(new ScrollingMovementMethod());
+
+
                 File log_file = new File("/storage/emulated/0/Download/logger.txt");
+
+
                 if (IS_DOWNLOADER_RUNNING == 1) {
                     if (tail2(log_file, 1) != null && tail2(log_file,1) != " " && tail2(log_file,1) != "") {
                         LAST_LINE_2 = tail2(log_file, 1);
                     }
 
-                    System.out.println("last_line_2");
-                    System.out.println(LAST_LINE_2);
-                    System.out.println("Last_line");
-                    System.out.println(LAST_LINE);
+                   // System.out.println("last_line_2");
+                 //   System.out.println(LAST_LINE_2);
+                  //  System.out.println("Last_line");
+                 //   System.out.println(LAST_LINE);
                     if (LAST_LINE!= null && LAST_LINE_2 != null && LAST_LINE != LAST_LINE_2 && LAST_LINE_2 != "" && LAST_LINE_2 != "\n") {
                         if ( LAST_LINE_2.contains(LAST_LINE) || LAST_LINE.contains(LAST_LINE_2)) {
                         }
@@ -197,9 +199,11 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                     }
+
                     if (tail2(log_file, 1) != null && tail2(log_file, 1) != "" && tail2(log_file,1) != " ") {
                         LAST_LINE = tail2(log_file, 1);
                     }
+
                 }
                 handler.postDelayed(this, 50); // set time here to refresh textView)
             }
@@ -240,27 +244,42 @@ public class MainActivity extends AppCompatActivity {
         Run_with_arguments.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final EditText cli_text_command = new EditText(MainActivity.this);
-                cli_text_command.setHint("-v -f best https://www.examplelink.com");
-                new AlertDialog.Builder(MainActivity.this)
-                        .setTitle("Download Arguments")
-                        .setMessage("Enter download arguments just as you would on a command line, including the link.")
-                        .setView(cli_text_command)
-                        .setPositiveButton("Execute", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                //String user_input_for_customexecution = cli_text_command.getText().toString();
-                                //System.out.println(user_input_for_customexecution);
+                if (ContextCompat.checkSelfPermission(MainActivity.this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
 
-                                    //.task = new Custom_Python_downloader().execute();
-                                task = new Custom_Python_downloader().execute();
-                            }
-                        })
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                            }
-                        })
-                        .show();
+                    final EditText cli_text_command = new EditText(MainActivity.this);
+                    cli_text_command.setHint("-v -f best https://www.examplelink.com");
+                    new AlertDialog.Builder(MainActivity.this)
+                            .setTitle("Download Arguments")
+                            .setMessage("Enter download arguments just as you would on a command line, including the link.")
+                            .setView(cli_text_command)
+                            .setPositiveButton("Execute", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    user_input_for_customexecution = cli_text_command.getText().toString();
+                                    System.out.println(user_input_for_customexecution);
 
+                                    try {
+                                        new Custom_Python_downloader().execute();
+                                    }
+                                    catch (Exception e) {
+                                        Toast custom_args = Toast.makeText(getApplicationContext(),
+                                                "Downloader encountered an issue \n 1)Check Storage Permission \n 2)Check internet connection \n 3) File a bug report", Toast.LENGTH_LONG);
+                                        custom_args.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 0);
+                                        custom_args.show();
+                                    }
+                                }
+                            })
+                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                }
+                            })
+                            .show();
+                } else {
+                    Toast storage_toast = Toast.makeText(getApplicationContext(),
+                            "You need write permission for this action", Toast.LENGTH_LONG);
+                    storage_toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 0);
+                    storage_toast.show();
+                }
             }
         });
 
@@ -464,7 +483,8 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-
+            //final EditText cli_text_command = new EditText(MainActivity.this);
+            //user_input_for_customexecution = cli_text_command.getText().toString();
         }
 
         protected Bitmap doInBackground(Void... params) {
@@ -479,6 +499,7 @@ public class MainActivity extends AppCompatActivity {
             wakeLock.acquire();
 
             IS_DOWNLOADER_RUNNING = 1; // downloader about to start, push download status
+            System.out.println(user_input_for_customexecution);
             download_prog_with_args.callAttr("run_custom_arguments", user_input_for_customexecution); //call youtube-dl python module
 
 

@@ -12,7 +12,7 @@ android {
             pyc {
                 stdlib true
             }
-            buildPython "C:/Users/Oculus Games/AppData/Local/Programs/Python/Python37/python.exe"
+            buildPython "C:/Users/danie/AppData/Local/Programs/Python/Python37-32/python.exe"
 
         }
         ndk {
