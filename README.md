@@ -18,8 +18,7 @@ The app may behave in unintented ways as it is in beta and currently is very bar
 
 ## Screenshots
 <p float="left">
-  <img src="https://user-images.githubusercontent.com/52898838/61487117-ed4de780-a959-11e9-9c81-48a1d0a3e1df.jpg" width="288" />
-  <img src="https://user-images.githubusercontent.com/52898838/61483577-f2a73400-a951-11e9-9d74-9d0d9464bc3d.jpg" width="288" /> 
+  <img src="https://user-images.githubusercontent.com/52898838/61835082-39ec6380-ae2f-11e9-886f-5a0e98d9de7e.png" width="288">
   <img src="https://user-images.githubusercontent.com/52898838/61483597-018de680-a952-11e9-8dc4-5a1981196ece.jpg" width="288">
 </p>
 
