@@ -21,7 +21,7 @@ android {
         applicationId "com.dansudz.simpledl"
         minSdkVersion 17 //23
         targetSdkVersion 29 //29
-        versionCode 11
+        versionCode 12
         versionName "1.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
