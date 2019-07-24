@@ -20,7 +20,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".MainActivity"
+            android:launchMode="singleInstance"
             android:configChanges = "orientation"
             android:screenOrientation = "portrait"
             >

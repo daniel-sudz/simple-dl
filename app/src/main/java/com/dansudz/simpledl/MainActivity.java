@@ -12,6 +12,7 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -60,6 +61,7 @@ import static java.security.AccessController.getContext;
 
 
 public class MainActivity extends AppCompatActivity {
+    public boolean NOTIFICATIONS_ARE_SENDING = true;
     public int apk_download_progress = 0;
     public boolean IS_APK_DOWNLOADING = false;
     public double APK_SIZE = 0.0;
@@ -103,13 +105,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        final ProgressBar apkdownload_bar = (ProgressBar) findViewById(R.id.apk_download);
+
+        //final ProgressBar apkdownload_bar = (ProgressBar) findViewById(R.id.apk_download);
 
 
         final TextView textViewToChange = (TextView) findViewById(R.id.logtobedisplayed);
         textViewToChange.setText(
                 "Full error log can be viewed in the downloads folder");
 
+        /*
         final Handler download_latest_release = new Handler(); //updates the console window
         download_latest_release.post(new Runnable() {
             @Override
@@ -157,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
-
+        */
 
 
         final Handler handler = new Handler(); //updates the console window
@@ -209,6 +213,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        /*
         Button update_app = findViewById(R.id.update_app);
         update_app.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -239,6 +244,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        */
 
         Button Run_with_arguments = findViewById(R.id.cli_arguments);
         Run_with_arguments.setOnClickListener(new View.OnClickListener() {
@@ -297,7 +303,8 @@ public class MainActivity extends AppCompatActivity {
         video_cancel_download.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                NotificationManager nomanager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                nomanager.cancelAll();
                 ProcessPhoenix.triggerRebirth(MainActivity.this); //kill's app and reloads it, canceling all downloads
 
             }
@@ -441,9 +448,25 @@ public class MainActivity extends AppCompatActivity {
                 .setContentText(notificationstring)
                 .setOngoing(true); // Again, THIS is the important line
 
+
+
+
         // .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
         NotificationManager nomanager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        Intent appActivityIntent = new Intent(this, MainActivity.class
+        );
+
+        PendingIntent contentAppActivityIntent =
+                PendingIntent.getActivity(
+                        this,  // calling from Activity
+                        0,
+                        appActivityIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+
+        notification.setContentIntent(contentAppActivityIntent);
+
         nomanager.notify(1, notification.build());
 
     }
